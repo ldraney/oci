@@ -1,0 +1,105 @@
+{
+  "namespace": "oci-python-vanilla",
+  "type": "infrastructure",
+  "description": "Oracle Cloud Infrastructure control via vanilla Python SDK",
+  "status": "production",
+  "capabilities": {
+    "compute": {
+      "launch_instances": true,
+      "manage_instances": true,
+      "supported_shapes": ["VM.Standard.A1.Flex", "VM.Standard.E4.Flex"],
+      "supported_os": ["Ubuntu 22.04", "Ubuntu 20.04", "Oracle Linux"]
+    },
+    "networking": {
+      "vcn_management": false,
+      "uses_existing": true
+    },
+    "storage": {
+      "object_storage": false,
+      "block_volumes": false
+    }
+  },
+  "managed_instances": {
+    "production": [
+      {
+        "namespace": "tamara",
+        "instance_name": "tamara-deployment-server",
+        "purpose": "AI manufacturing app deployment",
+        "shape": "VM.Standard.A1.Flex",
+        "status": "RUNNING"
+      },
+      {
+        "namespace": "purelabsourcing",
+        "instance_name": "purelabsourcing-ubuntu-arm64",
+        "purpose": "Main organization infrastructure",
+        "count": 2,
+        "shape": "VM.Standard.A1.Flex",
+        "status": "RUNNING"
+      }
+    ],
+    "development": [
+      {
+        "namespace": "test",
+        "instance_name": "ubuntu-vanilla-test",
+        "purpose": "Testing and development",
+        "shape": "VM.Standard.A1.Flex",
+        "status": "RUNNING"
+      }
+    ]
+  },
+  "namespace_allocation": {
+    "strategy": "shared_with_isolation",
+    "recommendations": {
+      "dedicated_instances": [
+        {
+          "namespace": "tamara",
+          "reason": "Production AI app with specific deployment needs",
+          "current": true
+        },
+        {
+          "namespace": "lab-manager",
+          "reason": "Central lab operations, needs dedicated resources",
+          "current": false
+        }
+      ],
+      "shared_instances": [
+        {
+          "namespace": "mariana",
+          "reason": "Development/testing, can share with main infrastructure"
+        },
+        {
+          "namespace": "annabelle",
+          "reason": "Unknown requirements, start with shared"
+        },
+        {
+          "namespace": "karri",
+          "reason": "Unknown requirements, start with shared"
+        }
+      ]
+    }
+  },
+  "deployment_model": {
+    "type": "hub_and_spoke",
+    "hub": "purelabsourcing",
+    "spokes": ["tamara", "lab-manager"],
+    "benefits": [
+      "Centralized management via this tool",
+      "Cost optimization (ARM instances are free tier eligible)",
+      "Resource sharing for development namespaces",
+      "Isolated production instances for critical apps"
+    ]
+  },
+  "cost_optimization": {
+    "current_monthly": "~$0 (ARM free tier)",
+    "recommendations": [
+      "Use ARM shapes (A1.Flex) when possible - free tier",
+      "Share development instances across non-critical namespaces",
+      "Only dedicated instances for production workloads"
+    ]
+  },
+  "commands": {
+    "launch_for_namespace": "make launch NAME=<namespace>",
+    "list_all": "make list",
+    "terminate": "make terminate ID=<instance-id>"
+  }
+}
