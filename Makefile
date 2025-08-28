@@ -32,27 +32,27 @@ help:
 # Launch operations
 launch:
 	@echo "🚀 Launching Ubuntu 22.04 instance..."
-	@python3 oci.py
+	@poetry run python oci-control.py
 
 launch-small:
 	@echo "🚀 Launching small Ubuntu instance (1 OCPU, 6GB)..."
-	@python3 oci.py --shape VM.Standard.A1.Flex --ocpus 1 --memory 6
+	@poetry run python oci-control.py --shape VM.Standard.A1.Flex --ocpus 1 --memory 6
 
 launch-large:
 	@echo "🚀 Launching large Ubuntu instance (2 OCPU, 16GB)..."
-	@python3 oci.py --shape VM.Standard.A1.Flex --ocpus 2 --memory 16
+	@poetry run python oci-control.py --shape VM.Standard.A1.Flex --ocpus 2 --memory 16
 
 # Instance management
 list:
 	@echo "📋 Listing all instances..."
-	@python3 oci.py --list
+	@poetry run python oci-control.py --list
 
 status:
 ifndef ID
 	@echo "❌ Usage: make status ID=<instance-ocid>"
 else
 	@echo "🔍 Getting status for $(ID)..."
-	@python3 oci.py --status $(ID)
+	@poetry run python oci-control.py --status $(ID)
 endif
 
 terminate:
@@ -71,11 +71,11 @@ clean-all:
 # Network information
 show-network:
 	@echo "🌐 Network Configuration:"
-	@python3 -c "exec(open('oci.py').read()); import asyncio; asyncio.run(show_network_info())"
+	@poetry run python -c "exec(open('oci-control.py').read()); import asyncio; asyncio.run(show_network_info())"
 
 show-ips:
 	@echo "🌍 Public IPs:"
-	@python3 oci.py --list | grep -E "(Public IP:|ubuntu@)" || echo "No instances with public IPs"
+	@poetry run python oci-control.py --list | grep -E "(Public IP:|ubuntu@)" || echo "No instances with public IPs"
 
 # SSH helper
 ssh:
@@ -90,19 +90,19 @@ endif
 # Testing and setup
 test:
 	@echo "🧪 Testing OCI connectivity..."
-	@python3 -c "import oci; print('✅ OCI SDK installed')" || echo "❌ OCI SDK not found"
-	@python3 -c "import os; assert os.getenv('OCI_USER_OCID'), 'OCI_USER_OCID not set'" && echo "✅ OCI_USER_OCID set" || echo "❌ OCI_USER_OCID not set"
-	@python3 -c "import os; assert os.getenv('OCI_FINGERPRINT'), 'OCI_FINGERPRINT not set'" && echo "✅ OCI_FINGERPRINT set" || echo "❌ OCI_FINGERPRINT not set"
-	@python3 -c "import os; assert os.getenv('OCI_TENANCY_OCID'), 'OCI_TENANCY_OCID not set'" && echo "✅ OCI_TENANCY_OCID set" || echo "❌ OCI_TENANCY_OCID not set"
-	@python3 -c "import os; assert os.getenv('OCI_KEY_FILE'), 'OCI_KEY_FILE not set'" && echo "✅ OCI_KEY_FILE set" || echo "❌ OCI_KEY_FILE not set"
-	@python3 -c "import os; assert os.path.exists(os.path.expanduser(os.getenv('OCI_KEY_FILE', ''))), 'Key file not found'" && echo "✅ Key file exists" || echo "❌ Key file not found"
+	@poetry run python -c "import oci; print('✅ OCI SDK installed')" || echo "❌ OCI SDK not found"
+	@poetry run python -c "import os; assert os.getenv('OCI_USER_OCID'), 'OCI_USER_OCID not set'" && echo "✅ OCI_USER_OCID set" || echo "❌ OCI_USER_OCID not set"
+	@poetry run python -c "import os; assert os.getenv('OCI_FINGERPRINT'), 'OCI_FINGERPRINT not set'" && echo "✅ OCI_FINGERPRINT set" || echo "❌ OCI_FINGERPRINT not set"
+	@poetry run python -c "import os; assert os.getenv('OCI_TENANCY_OCID'), 'OCI_TENANCY_OCID not set'" && echo "✅ OCI_TENANCY_OCID set" || echo "❌ OCI_TENANCY_OCID not set"
+	@poetry run python -c "import os; assert os.getenv('OCI_KEY_FILE'), 'OCI_KEY_FILE not set'" && echo "✅ OCI_KEY_FILE set" || echo "❌ OCI_KEY_FILE not set"
+	@poetry run python -c "import os; assert os.path.exists(os.path.expanduser(os.getenv('OCI_KEY_FILE', ''))), 'Key file not found'" && echo "✅ Key file exists" || echo "❌ Key file not found"
 	@echo ""
 	@echo "🔌 Testing API connection..."
-	@python3 oci.py --list > /dev/null 2>&1 && echo "✅ Successfully connected to OCI" || echo "❌ Failed to connect to OCI"
+	@poetry run python oci-control.py --list > /dev/null 2>&1 && echo "✅ Successfully connected to OCI" || echo "❌ Failed to connect to OCI"
 
 install:
 	@echo "📦 Installing OCI Python SDK..."
-	pip install oci
+	poetry add oci
 
 # Development
 dev:
