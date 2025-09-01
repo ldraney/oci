@@ -1,105 +1,32 @@
 {
-  "namespace": "oci-python-vanilla",
+  "namespace": "oci",
   "type": "infrastructure",
-  "description": "Oracle Cloud Infrastructure control via vanilla Python SDK",
+  "description": "Oracle Cloud Infrastructure management",
+  "version": "3.0.0",
   "status": "production",
-  "capabilities": {
-    "compute": {
-      "launch_instances": true,
-      "manage_instances": true,
-      "supported_shapes": ["VM.Standard.A1.Flex", "VM.Standard.E4.Flex"],
-      "supported_os": ["Ubuntu 22.04", "Ubuntu 20.04", "Oracle Linux"]
-    },
-    "networking": {
-      "vcn_management": false,
-      "uses_existing": true
-    },
-    "storage": {
-      "object_storage": false,
-      "block_volumes": false
-    }
+  "port_allocation": {
+    "range": "7400-7499"
   },
-  "managed_instances": {
-    "production": [
-      {
-        "namespace": "tamara",
-        "instance_name": "tamara-deployment-server",
-        "purpose": "AI manufacturing app deployment",
-        "shape": "VM.Standard.A1.Flex",
-        "status": "RUNNING"
-      },
-      {
-        "namespace": "purelabsourcing",
-        "instance_name": "purelabsourcing-ubuntu-arm64",
-        "purpose": "Main organization infrastructure",
-        "count": 2,
-        "shape": "VM.Standard.A1.Flex",
-        "status": "RUNNING"
-      }
-    ],
-    "development": [
-      {
-        "namespace": "test",
-        "instance_name": "ubuntu-vanilla-test",
-        "purpose": "Testing and development",
-        "shape": "VM.Standard.A1.Flex",
-        "status": "RUNNING"
-      }
-    ]
+  "tools": {
+    "cli": "oci CLI (installed via brew)",
+    "sdk": "Python OCI SDK for automation",
+    "mcp": "Optional MCP server for Claude integration"
   },
-  "namespace_allocation": {
-    "strategy": "shared_with_isolation",
-    "recommendations": {
-      "dedicated_instances": [
-        {
-          "namespace": "tamara",
-          "reason": "Production AI app with specific deployment needs",
-          "current": true
-        },
-        {
-          "namespace": "lab-manager",
-          "reason": "Central lab operations, needs dedicated resources",
-          "current": false
-        }
-      ],
-      "shared_instances": [
-        {
-          "namespace": "mariana",
-          "reason": "Development/testing, can share with main infrastructure"
-        },
-        {
-          "namespace": "annabelle",
-          "reason": "Unknown requirements, start with shared"
-        },
-        {
-          "namespace": "karri",
-          "reason": "Unknown requirements, start with shared"
-        }
-      ]
-    }
+  "current_state": {
+    "instances": "All terminated",
+    "cost": "$0/month",
+    "ready_for": "Fresh deployments"
   },
-  "deployment_model": {
-    "type": "hub_and_spoke",
-    "hub": "purelabsourcing",
-    "spokes": ["tamara", "lab-manager"],
-    "benefits": [
-      "Centralized management via this tool",
-      "Cost optimization (ARM instances are free tier eligible)",
-      "Resource sharing for development namespaces",
-      "Isolated production instances for critical apps"
-    ]
-  },
-  "cost_optimization": {
-    "current_monthly": "~$0 (ARM free tier)",
-    "recommendations": [
-      "Use ARM shapes (A1.Flex) when possible - free tier",
-      "Share development instances across non-critical namespaces",
-      "Only dedicated instances for production workloads"
-    ]
+  "free_tier": {
+    "arm_cores": 4,
+    "arm_memory_gb": 24,
+    "x86_micro": 2,
+    "status": "Available"
   },
   "commands": {
-    "launch_for_namespace": "make launch NAME=<namespace>",
-    "list_all": "make list",
-    "terminate": "make terminate ID=<instance-id>"
+    "list_instances": "oci compute instance list --compartment-id $OCI_TENANCY_OCID",
+    "launch_instance": "oci compute instance launch --compartment-id $OCI_TENANCY_OCID ...",
+    "terminate": "oci compute instance terminate --instance-id <id>",
+    "python_list": "poetry run python oci-control.py --list"
   }
 }

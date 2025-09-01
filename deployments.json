@@ -1,0 +1,30 @@
+{
+  "deployments": [
+    {
+      "timestamp": "2025-09-01T01:18:00Z",
+      "namespace": "tamara",
+      "instance": {
+        "id": "ocid1.instance.oc1.phx.anyhqljsr3mpxgicd7qan7kwoh3ubgzkma2a5vmdseitp7gbqc6y443xhruq",
+        "name": "tamara-production",
+        "ip": "141.148.159.153",
+        "shape": "VM.Standard.A1.Flex",
+        "ocpus": 2,
+        "memory_gb": 12
+      },
+      "method": "cloud-init with GitHub token",
+      "status": "success"
+    }
+  ],
+  "terminated": [
+    "ocid1.instance.oc1.phx.anyhqljsr3mpxgic5erhbb7qn4kxpjbj2hkrttuxbpuy2vgiyxzwbvdmf6mq",
+    "ocid1.instance.oc1.phx.anyhqljsr3mpxgicbplqurnhpvyecubbvjzmmadatfxtelx4ep7mz6j3s4tq",
+    "ocid1.instance.oc1.phx.anyhqljsr3mpxgicrt7mgf74p5eyzqx2smmasyfq6pfhifso7uc7r3z6tlfa",
+    "ocid1.instance.oc1.phx.anyhqljsr3mpxgicnjnpuqofjcov3vedj3blha2fzaujvizawxyk3udp3vfa",
+    "ocid1.instance.oc1.phx.anyhqljsr3mpxgicffniqfbum4wqy5mncu6c4e5zwll2khas4e6racuxgg2q",
+    "ocid1.instance.oc1.phx.anyhqljsr3mpxgiclo3nndipazrrixv6ccd2qnx4whph5fuw3646dbr2rgyq",
+    "ocid1.instance.oc1.phx.anyhqljsr3mpxgicmuzo3ncipicxet4ptdc42yi57ujm66b5z6tosrrf7owq",
+    "ocid1.instance.oc1.phx.anyhqljsr3mpxgicu5ssujphihppqpnefs6togrxijm7cvzio5ausqmkelrq",
+    "ocid1.instance.oc1.phx.anyhqljsr3mpxgic6aukveugsbdrtf33bl23pxbagvdl5rtiraim4w2tnfqq",
+    "ocid1.instance.oc1.phx.anyhqljsr3mpxgicjrpfoicwb4sqmixma4ohb2b3xexgzwduyb4uc5chwkuq"
+  ]
+}
