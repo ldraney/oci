@@ -24,13 +24,13 @@ def launch_staging_server():
     
     print("🚀 Launching Staging Server on OCI\n")
     
-    # 1. Get Ubuntu image for x86 (free tier)
-    print("1️⃣  Finding Ubuntu 22.04 image for x86...")
+    # 1. Get Ubuntu image for ARM (like production)
+    print("1️⃣  Finding Ubuntu 22.04 image for ARM...")
     images = compute.list_images(
         compartment_id=compartment_id,
         operating_system="Canonical Ubuntu",
         operating_system_version="22.04",
-        shape="VM.Standard.E2.1.Micro",  # Free tier x86
+        shape="VM.Standard.A1.Flex",  # ARM shape like production
         sort_by="TIMECREATED",
         sort_order="DESC"
     ).data
@@ -109,8 +109,12 @@ echo "✅ Staging setup complete!"
     instance_details = oci.core.models.LaunchInstanceDetails(
         availability_domain=public_subnet.availability_domain,
         compartment_id=compartment_id,
-        shape="VM.Standard.E2.1.Micro",
+        shape="VM.Standard.A1.Flex",
         display_name="staging-server",
+        shape_config=oci.core.models.LaunchInstanceShapeConfigDetails(
+            ocpus=2.0,
+            memory_in_gbs=12.0
+        ),
         source_details=oci.core.models.InstanceSourceViaImageDetails(
             source_type="image",
             image_id=image_id
